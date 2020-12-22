@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AnalyticsCounter {
+  
 /**
  *
  *The filepath of the files.
@@ -20,11 +21,10 @@ public class AnalyticsCounter {
      *
      *To start the program.
      */
-
     public static void main(String args[]) throws Exception {
 
-        SymptomsFileReaderAndWriter symptomsFileReaderAndWriter = new SymptomsFileReaderAndWriter();
-        AnalyseSymptoms analyseSymptoms = new AnalyseSymptoms();
+       SymptomsFileReaderAndWriter symptomsFileReaderAndWriter = new SymptomsFileReaderAndWriter();
+       AnalyseSymptoms analyseSymptoms = new AnalyseSymptoms();
 
        List<String> listOfSymptoms = symptomsFileReaderAndWriter.readSymptomsFromFile(SYMPTOMS_TXT);
 

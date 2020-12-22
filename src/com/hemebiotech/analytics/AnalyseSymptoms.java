@@ -11,7 +11,6 @@ public class AnalyseSymptoms {
      *
      * To analyse and count the symptoms.
      */
-
     public Map<String, Integer> getMapOfSymptoms (List<String> listOfSymptoms) {
 
         Collections.sort(listOfSymptoms);
