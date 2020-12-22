@@ -9,6 +9,10 @@ import java.util.Map;
 
 public class SymptomsFileReaderAndWriter {
 
+    /**
+     *
+     * Read the file symptoms.
+     */
     public List<String> readSymptomsFromFile (String filepath) {
 
         ReadSymptomDataFromFile readSymptomDataFromFile = new ReadSymptomDataFromFile(filepath);
@@ -17,6 +21,10 @@ public class SymptomsFileReaderAndWriter {
         return symptoms;
     }
 
+    /**
+     *
+     * Delete the file results if exist and create a new one to class the symptoms in ordered list.
+     */
     public void writeSymptomsInResultsFile (Map<String, Integer> mapOfSymptoms, String filepath) throws IOException {
 
         File resultsFile = new File(filepath);
