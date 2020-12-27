@@ -8,14 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Simple brute force implementation
+ * Simple brute force implementation.
  */
 public class ReadSymptomDataFromFile implements ISymptomReader {
 
-    private String filePath;
+    private final String filePath;
 
     /**
-     * @param filePath a full or partial path to file with symptom strings in it, one per line
+     * Constructor with filepath parameter.
+     * @param filePath a full or partial path to file with symptom strings in it, one per line.
      */
     public ReadSymptomDataFromFile(String filePath) {
         this.filePath = filePath;
@@ -23,7 +24,7 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 
     @Override
     public List<String> GetSymptoms() {
-        ArrayList<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
 
         if (filePath != null) {
             try {
@@ -37,7 +38,8 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
                 reader.close();
             } catch (FileNotFoundException f) {
                 System.out.println("File not found with this specified path : " + filePath);
-            } catch(IOException e){
+                System.out.println(f.getMessage());
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

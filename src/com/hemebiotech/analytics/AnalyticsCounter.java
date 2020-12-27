@@ -1,90 +1,89 @@
 package com.hemebiotech.analytics;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
+/**
+ * To read, analyse the list of symptoms  and count them.
+ */
 public class AnalyticsCounter {
 
-    /**
-     * The filepath of the files.
-     */
     public static final String SYMPTOMS_TXT = "src/ressources/symptoms.txt";
     public static final String RESULTATS_TXT = "src/results/resultats.out";
 
     /**
-     * Read and sort the symptom's list
+     * Read and sort the symptom's list.
+     *
+     * @param filepath The path of the file symptoms.
+     * @return Return value symptoms and finish the method.
      */
-    public static class SymptomsFileReaderAndWriter {
+    public List<String> readSymptomsFromFile(String filepath) {
 
-        public List<String> readSymptomsFromFile(String filepath) {
+        ReadSymptomDataFromFile readSymptomDataFromFile = new ReadSymptomDataFromFile(filepath);
+        List<String> symptoms = readSymptomDataFromFile.GetSymptoms();
+        Collections.sort(symptoms);
+        return symptoms;
+    }
 
-            ReadSymptomDataFromFile readSymptomDataFromFile = new ReadSymptomDataFromFile(filepath);
-            List<String> symptoms = readSymptomDataFromFile.GetSymptoms();
-            Collections.sort(symptoms);
-            return symptoms;
-        }
+    /**
+     * To analyse and count the symptoms.
+     *
+     * @param listOfSymptoms List of symptoms sort by alphabetic order.
+     * @return Return value mapOfSymptoms and finish the method.
+     */
+    public Map<String, Integer> getMapOfSymptoms(List<String> listOfSymptoms) {
 
-        /**
-         * Delete the results file if exists and write a new one.
-         *
-         * @param mapOfSymptoms
-         * @param filepath
-         * @throws IOException
-         */
-        public void writeSymptomsInResultsFile(Map<String, Integer> mapOfSymptoms, String filepath) throws IOException {
+        Collections.sort(listOfSymptoms);
 
-            File resultsFile = new File(filepath);
-            if (resultsFile.exists()) {
-                resultsFile.delete();
+        Map<String, Integer> mapOfSymptoms = new LinkedHashMap<>();
+
+        for (String symptom : listOfSymptoms) {
+            if (!mapOfSymptoms.containsKey(symptom)) {
+                mapOfSymptoms.put(symptom, 0);
             }
+        }
+        for (String symptom : listOfSymptoms) {
+            mapOfSymptoms.replace(symptom, mapOfSymptoms.get(symptom) + 1);
+        }
+        return mapOfSymptoms;
+    }
 
-            FileWriter writer = new FileWriter(filepath);
+    /**
+     * Delete the results file if exists and write a new one.
+     *
+     * @param mapOfSymptoms List of symptoms under map format.
+     * @param filePath      Path to output file.
+     */
+    public void writeSymptomsInResultsFile(Map<String, Integer> mapOfSymptoms, String filePath) {
+
+        FileWriter writer;
+        try {
+            writer = new FileWriter(filePath);
             for (Map.Entry<String, Integer> entry : mapOfSymptoms.entrySet()) {
                 writer.write(entry.getKey() + " : " + entry.getValue() + " \n");
             }
-
             writer.close();
-        }
-    }
-
-    public static class AnalyseSymptoms {
-
-        /**
-         * To analyse and count the symptoms.
-         */
-        public Map<String, Integer> getMapOfSymptoms(List<String> listOfSymptoms) {
-
-            Collections.sort(listOfSymptoms);
-
-            Map<String, Integer> mapOfSymptoms = new LinkedHashMap<>();
-
-            for (String symptom : listOfSymptoms) {
-                if (!mapOfSymptoms.containsKey(symptom)) {
-                    mapOfSymptoms.put(symptom, 0);
-                }
-            }
-            for (String symptom : listOfSymptoms) {
-                mapOfSymptoms.replace(symptom, mapOfSymptoms.get(symptom) + 1);
-            }
-            return mapOfSymptoms;
+        } catch (IOException e) {
+            System.out.println("A problem occurred when you attempt to write output file : " + filePath);
+            System.out.println(e.getMessage());
         }
     }
 
     /**
      * To start the program.
+     * @param args The argument is a String board.
      */
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) {
 
-       SymptomsFileReaderAndWriter symptomsFileReaderAndWriter = new SymptomsFileReaderAndWriter();
-       AnalyseSymptoms analyseSymptoms = new AnalyseSymptoms();
+        AnalyticsCounter analyticsCounter = new AnalyticsCounter();
 
-        List<String> listOfSymptoms = symptomsFileReaderAndWriter.readSymptomsFromFile(SYMPTOMS_TXT);
-
-        Map<String, Integer> mapOfSymptoms = analyseSymptoms.getMapOfSymptoms(listOfSymptoms);
-
-        symptomsFileReaderAndWriter.writeSymptomsInResultsFile(mapOfSymptoms, RESULTATS_TXT);
+        analyticsCounter.writeSymptomsInResultsFile(
+                analyticsCounter.getMapOfSymptoms(
+                        analyticsCounter.readSymptomsFromFile(SYMPTOMS_TXT)
+                ), RESULTATS_TXT);
     }
-
 }
