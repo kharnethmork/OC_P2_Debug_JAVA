@@ -24,9 +24,7 @@ public class AnalyticsCounter {
     public List<String> readSymptomsFromFile(String filepath) {
 
         ReadSymptomDataFromFile readSymptomDataFromFile = new ReadSymptomDataFromFile(filepath);
-        List<String> symptoms = readSymptomDataFromFile.getSymptoms();
-        Collections.sort(symptoms);
-        return symptoms;
+        return readSymptomDataFromFile.getSymptoms();
     }
 
     /**
